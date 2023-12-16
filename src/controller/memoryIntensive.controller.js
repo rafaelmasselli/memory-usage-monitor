@@ -7,7 +7,10 @@ class MemoryIntensiveController {
 
   handle(req, res) {
     const data = this.service.handle();
-    res.send(data);
+    res.status(200).json({
+      message: "operation carried out successfully",
+      bigArray: data,
+    });   
   }
 }
 

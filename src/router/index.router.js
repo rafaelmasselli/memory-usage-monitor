@@ -1,11 +1,11 @@
 const MemoryIntensiveController = require("../controller/memoryIntensive.controller");
+const MonitorMemoryMiddleware = require("../middleware/monitorMemory.middleware");
 const express = require("express");
 const router = express.Router();
 
-const memoryIntensiveController = new MemoryIntensiveController();
-
-router.get("/", (req, res) => {
-  memoryIntensiveController.handle(req, res);
+router.get("/", (req, res, next) => {
+  new MonitorMemoryMiddleware().handle(next),
+    new MemoryIntensiveController().handle(req, res);
 });
 
 module.exports = router;
