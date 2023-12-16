@@ -1,4 +1,4 @@
-const MemoryIntensiveController = require("../src/controller/memoryIntensive.controller");
+const MemoryIntensiveController = require("../controller/memoryIntensive.controller");
 const express = require("express");
 const router = express.Router();
 
