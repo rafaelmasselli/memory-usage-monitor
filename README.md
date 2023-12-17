@@ -15,6 +15,9 @@ npm start
 artillery quick --count 10 -n 20 http://localhost:3000
 ```
 
+E assim, será realizado o teste de desempenho da rota GET com um teste usando um grande array.
+![](./.github/Screencast-from-17-12-2023-14_42_56.gif)
+
 ### Retorno do middleware de monitoramento de memoria
 
 Retorna: <Object>
