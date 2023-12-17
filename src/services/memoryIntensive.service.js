@@ -1,10 +1,15 @@
-class memoryIntensiveService {
-  handle() {
-    const largeArray = new Array(1e6).fill("some data");
-    const processedArray = largeArray.map((item) => item.toUpperCase());
-    largeArray.length = 0;
-    return processedArray;
+const memoryIntensiveOperation = require("../util/memoryIntensiveOperation");
+
+class MemoryIntensiveService {
+  async handle() {
+    try {
+      const result = await memoryIntensiveOperation();
+      return result;
+    } catch (error) {
+      console.error("Erro na operação intensiva de memória:", error);
+      throw error;
+    }
   }
 }
 
-module.exports = memoryIntensiveService;
+module.exports = MemoryIntensiveService;
