@@ -1,6 +1,5 @@
 const express = require("express");
 const v8 = require("v8");
-
 const router = require("./src/router/index.router");
 
 const app = express();
@@ -11,5 +10,5 @@ app.use(express.json());
 app.use("/", router);
 
 app.listen(port, () => {
-  console.log(`project running http://localhost:3000`);
+  console.log(`project running http://localhost:${port}`);
 });

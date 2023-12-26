@@ -10,7 +10,7 @@ class MemoryIntensiveController {
     res.status(200).json({
       message: "operation carried out successfully",
       bigArray: data,
-    });   
+    });
   }
 }
 

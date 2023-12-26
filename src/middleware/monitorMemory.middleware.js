@@ -1,14 +1,16 @@
 const os = require("os-utils");
 
-class monitorMemoryMiddleware {
+class MonitorMemoryMiddleware {
   handle(next) {
     const memoryUsage = process.memoryUsage();
     console.log(`Memory Usage: ${JSON.stringify(memoryUsage)}`);
-    os.cpuUsage(function (v) {
-      console.log("CPU Usage (%): " + v);
+
+    os.cpuUsage(function (cpuUsage) {
+      console.log("CPU Usage (%): " + cpuUsage);
     });
+
     next();
   }
 }
 
-module.exports = monitorMemoryMiddleware;
+module.exports = MonitorMemoryMiddleware;
