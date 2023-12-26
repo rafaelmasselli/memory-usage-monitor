@@ -10,7 +10,12 @@
 ### Iniciando o projeto
 
 ```bash
-npm start
+# buildando o dockerfile
+docker build -t memory .
+
+# Iniciando o docker e o projeto
+docker run -p 3000:3000 memory
+
 # Em outro terminal inicie os testes
 artillery quick --count 10 -n 20 http://localhost:3000
 ```
@@ -81,6 +86,6 @@ Com base nas informações sobre o uso de recursos, você pode ajustar configura
 
 Certifique-se de liberar recursos (como conexões de banco de dados, manipuladores de arquivos) após o uso. O monitoramento de memória pode ajudar a identificar se os recursos estão sendo liberados corretamente.
 
-#### Implementação de Caching:
+### Retorno do middleware de cache
 
-Considere implementar caching para evitar processamento repetitivo de dados que não mudam com frequência, reduzindo assim a carga na CPU.
+O middleware CacheMiddleware implementa uma estratégia de cache simples usando Redis para armazenar e recuperar resultados de operações intensivas de memória, reduzindo assim o tempo de resposta e melhorando o desempenho da aplicação. Ele é útil para evitar a repetição de cálculos ou consultas que são caras em termos de tempo e recursos.
