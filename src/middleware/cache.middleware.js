@@ -6,7 +6,7 @@ class CacheMiddleware {
     this.redisClient = null;
   }
 
-  async #inicializeDatabase() {
+  async inicializeDatabase() {
     try {
       this.redisClient = redis.createClient({
         host: "redis",
@@ -29,49 +29,44 @@ class CacheMiddleware {
     }
   }
 
-  #handleCache(req, res, next, keyCache) {
+  async #handleCache(req, res, next, keyCache) {
     if (this.redisClient.get) {
-      this.redisClient.get(keyCache, (err, dataDoCache) => {
-        if (err) {
-          console.error(`Erro ao obter dados do cache do Redis: ${err}`);
-          next();
-        } else if (dataDoCache) {
+      try {
+        const dataDoCache = await this.redisClient.get(keyCache);
+        if (dataDoCache) {
           res.send(`Dados do cache (Redis): ${dataDoCache}`);
         } else {
-          try {
-            const resultOperation = memoryIntensiveOperation();
-            this.redisClient.setex(
-              keyCache,
-              60,
-              JSON.stringify(resultOperation)
-            );
-            next();
-          } catch (error) {
-            console.error(`Erro na operação intensiva de memória: ${error}`);
-            next();
-          }
+          const resultOperation = memoryIntensiveOperation();
+          await this.redisClient.setex(
+            keyCache,
+            60,
+            JSON.stringify(resultOperation)
+          );
+          next();
         }
-      });
+      } catch (error) {
+        console.error(`Erro ao obter dados do cache do Redis: ${error}`);
+        next();
+      }
     } else {
       console.error("client ou client.get não está definido");
       next();
     }
   }
 
-  handle(req, res, next) {
+  async handle(req, res, next) {
     const keyCache = req.url;
 
     if (!this.redisClient) {
-      this.#inicializeDatabase()
-        .then(() => {
-          this.#handleCache(req, res, next, keyCache);
-        })
-        .catch((error) => {
-          console.error("Falha ao inicializar o Redis:", error);
-          next();
-        });
+      try {
+        await this.inicializeDatabase();
+        await this.#handleCache(req, res, next, keyCache);
+      } catch (error) {
+        console.error("Falha ao inicializar o Redis:", error);
+        next();
+      }
     } else {
-      this.#handleCache(req, res, next, keyCache);
+      await this.#handleCache(req, res, next, keyCache);
     }
   }
 }
